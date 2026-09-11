@@ -1,0 +1,33 @@
+{
+  "name": "harness",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "dist-electron/main.cjs",
+  "scripts": {
+    "build:electron": "bun build src/main.ts src/preload.ts --outdir dist-electron --target node --format cjs --external electron --entry-naming [name].cjs",
+    "build:renderer": "bun build.ts",
+    "build": "bun run build:electron && bun run build:renderer",
+    "start": "bun run build && electron .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.8.0",
+    "bun-plugin-tailwind": "^0.1.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cn": "^0.2.6",
+    "lucide-react": "^1.45.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwind-merge": "^3.6.0",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "electron": "^39.0.0",
+    "typescript": "^5"
+  }
+}
