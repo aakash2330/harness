@@ -1,8 +1,16 @@
 import { contextBridge, ipcRenderer } from "electron";
+import type { DesktopBridge } from "./contracts";
+import { Channels } from "./ipc/channels";
 
-contextBridge.exposeInMainWorld("desktop", {
-  hello: (): Promise<string> => ipcRenderer.invoke("hello"),
-  claudeLoggedIn: (): Promise<boolean> => ipcRenderer.invoke("claude:loggedIn"),
-  claudeLogin: (): Promise<void> => ipcRenderer.invoke("claude:login"),
-  claudeLogout: (): Promise<void> => ipcRenderer.invoke("claude:logout"),
-});
+const api: DesktopBridge = {
+  chat: {
+    send: (text) => ipcRenderer.invoke(Channels.chatSend, text),
+  },
+  auth: {
+    loggedIn: () => ipcRenderer.invoke(Channels.authLoggedIn),
+    login: () => ipcRenderer.invoke(Channels.authLogin),
+    logout: () => ipcRenderer.invoke(Channels.authLogout),
+  },
+};
+
+contextBridge.exposeInMainWorld("desktop", api);

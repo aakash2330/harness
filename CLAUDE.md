@@ -109,3 +109,7 @@ bun --hot ./index.ts
 ```
 
 For more information, read the Bun API docs in `node_modules/bun-types/docs/**.mdx`.
+
+## Project conventions
+
+- Read `docs/structure.md` before adding a feature, shared type, or IPC method. Shared types live in `src/contracts/`, IPC handlers in `src/ipc/`, one file per feature. This follows the `packages/contracts` layout of https://github.com/pingdotgg/t3code.

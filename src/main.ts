@@ -1,11 +1,13 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import path from "node:path";
-import * as claude from "./claude-auth";
+import { registerChat } from "./ipc/chat";
+import { registerAuth } from "./ipc/auth";
 
 function createWindow() {
   const win = new BrowserWindow({
     width: 900,
     height: 600,
+    titleBarStyle: "hiddenInset",
     webPreferences: {
       preload: path.join(app.getAppPath(), "dist-electron", "preload.cjs"),
       contextIsolation: true,
@@ -14,13 +16,13 @@ function createWindow() {
     },
   });
   win.webContents.openDevTools();
-  win.loadFile(path.join(app.getAppPath(), "dist-renderer", "index.html"));
+  const devServerUrl = process.env.HARNESS_DEV_SERVER_URL;
+  if (devServerUrl) win.loadURL(devServerUrl);
+  else win.loadFile(path.join(app.getAppPath(), "dist-renderer", "index.html"));
 }
 
-ipcMain.handle("hello", () => "world");
-ipcMain.handle("claude:loggedIn", () => !!claude.load());
-ipcMain.handle("claude:login", async () => { await claude.login(); });
-ipcMain.handle("claude:logout", () => claude.logout());
+registerChat(ipcMain);
+registerAuth(ipcMain);
 
 app.whenReady().then(() => {
   createWindow();

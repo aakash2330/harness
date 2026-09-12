@@ -5,6 +5,7 @@
   "type": "module",
   "main": "dist-electron/main.cjs",
   "scripts": {
+    "dev": "bun scripts/dev.ts",
     "build:electron": "bun build src/main.ts src/preload.ts --outdir dist-electron --target node --format cjs --external electron --entry-naming [name].cjs",
     "build:renderer": "bun build.ts",
     "build": "bun run build:electron && bun run build:renderer",
