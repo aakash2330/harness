@@ -1,6 +1,8 @@
+import type { Message } from "./chat";
+
 export interface DesktopBridge {
   chat: {
-    send(text: string): Promise<string>;
+    send(messages: Message[]): Promise<string>;
   };
   auth: {
     loggedIn(): Promise<boolean>;

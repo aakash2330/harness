@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.90.0",
     "@base-ui/react": "^1.8.0",
     "bun-plugin-tailwind": "^0.1.2",
     "class-variance-authority": "^0.7.1",
@@ -21,6 +22,7 @@
     "lucide-react": "^1.45.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-spinners": "^0.17.1",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.3"
   },

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CornerDownLeft, LoaderCircle } from "lucide-react";
+import { CircleLoader } from "react-spinners";
 import { Input } from "@/components/ui/input";
 import type { Message } from "../../contracts";
 
@@ -9,10 +10,11 @@ export function Chat() {
   const [pending, setPending] = useState(false);
 
   async function send(text: string) {
-    setMessages((m) => [...m, { role: "user", text }]);
+    const next: Message[] = [...messages, { role: "user", text }];
+    setMessages(next);
     setPending(true);
     try {
-      const reply = await window.desktop.chat.send(text);
+      const reply = await window.desktop.chat.send(next);
       setMessages((m) => [...m, { role: "assistant", text: reply }]);
     } finally {
       setPending(false);
@@ -37,7 +39,7 @@ function MessageBubble({ role, text }: Message) {
   if (role === "assistant") return <p>{text}</p>;
   return (
     <div className="flex justify-end">
-      <div className="max-w-[80%] rounded-xl bg-neutral-100 px-3 py-[7px]">{text}</div>
+      <div className="max-w-[80%] rounded-xl bg-secondary px-3 py-[7px]">{text}</div>
     </div>
   );
 }
@@ -54,6 +56,11 @@ function ChatInput({ pending, onSend }: { pending: boolean; onSend: (text: strin
 
   return (
     <div className="relative">
+      {pending && (
+        <div className="mb-2 flex justify-start">
+          <CircleLoader color="var(--primary)" size={20} />
+        </div>
+      )}
       <Input
         value={draft}
         onChange={(e) => setDraft(e.target.value)}

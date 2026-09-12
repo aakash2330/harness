@@ -1,4 +1,5 @@
 {
+  "exclude": ["dist-electron", "dist-renderer", "node_modules"],
   "compilerOptions": {
     // Environment setup & latest features
     "lib": ["ESNext", "DOM"],
