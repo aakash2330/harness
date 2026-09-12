@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import path from "node:path";
 import { registerChat } from "./ipc/chat";
 import { registerAuth } from "./ipc/auth";
+import { openDatabase } from "./persistence/prisma";
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -25,6 +26,7 @@ registerChat(ipcMain);
 registerAuth(ipcMain);
 
 app.whenReady().then(() => {
+  openDatabase(path.join(app.getPath("userData"), "state.sqlite"));
   createWindow();
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

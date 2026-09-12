@@ -12,6 +12,9 @@ src/
     channels.ts         channel name constants, used by preload and handlers
     chat.ts             registerChat(ipcMain)
     auth.ts             registerAuth(ipcMain)
+  persistence/
+    prisma.ts           openDatabase(path) builds PrismaClient + libsql adapter, db() getter
+  generated/prisma/     `prisma generate` output, gitignored
   claude-auth.ts        auth service (OAuth), called by ipc/auth.ts
   main.ts               window + registerX(ipcMain) calls, nothing else
   preload.ts            implements DesktopBridge via Channels
@@ -28,3 +31,12 @@ Adding a feature `foo`:
 6. Renderer calls `window.desktop.foo.*`.
 
 Keep it flat. When a feature's service code outgrows one file, give it a folder (`src/ipc/foo/`), as t3code does for `orchestration/`.
+
+## Database
+
+Prisma 7 + `@prisma/adapter-libsql` on SQLite (`node:sqlite`/`bun:sqlite` are not usable: Electron
+main is Node 22, and Prisma needs a driver adapter; libsql is N-API so it loads in Electron without a
+rebuild). Schema in `prisma/schema.prisma`, models `@@map` onto t3code's column names. Datasource URL
+lives in `prisma.config.ts` and points at Electron's userData dir; `DATABASE_URL` overrides it.
+`bun run db:migrate` (= `prisma migrate dev`) after editing the schema. Migrations are applied by the
+CLI only; the packaged app does not migrate itself yet.

@@ -6,15 +6,20 @@
   "main": "dist-electron/main.cjs",
   "scripts": {
     "dev": "bun scripts/dev.ts",
-    "build:electron": "bun build src/main.ts src/preload.ts --outdir dist-electron --target node --format cjs --external electron --entry-naming [name].cjs",
+    "build:electron": "bun build src/main.ts src/preload.ts --outdir dist-electron --target node --format cjs --external electron --external \"@prisma/client\" --external \"@prisma/client/*\" --external \"@prisma/adapter-libsql\" --entry-naming [name].cjs",
     "build:renderer": "bun build.ts",
     "build": "bun run build:electron && bun run build:renderer",
     "start": "bun run build && electron .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",
     "@base-ui/react": "^1.8.0",
+    "@prisma/adapter-libsql": "7",
+    "@prisma/client": "7",
     "bun-plugin-tailwind": "^0.1.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -31,6 +36,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "electron": "^39.0.0",
+    "prisma": "7",
     "typescript": "^5"
   }
 }

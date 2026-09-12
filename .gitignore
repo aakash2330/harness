@@ -36,3 +36,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 # electron
 dist-electron
 dist-renderer
+
+# prisma generate output
+src/generated/
