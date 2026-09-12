@@ -14,6 +14,7 @@ src/
     auth.ts             registerAuth(ipcMain)
   persistence/
     prisma.ts           openDatabase(path) builds PrismaClient + libsql adapter, db() getter
+    threads.ts          upsertThread, appendMessage; the only place that calls db() for chat
   generated/prisma/     `prisma generate` output, gitignored
   claude-auth.ts        auth service (OAuth), called by ipc/auth.ts
   main.ts               window + registerX(ipcMain) calls, nothing else
@@ -29,6 +30,8 @@ Adding a feature `foo`:
 4. `src/ipc/foo.ts` exporting `registerFoo(ipc: IpcMain)`; call it from `main.ts`.
 5. Add `foo: { ... }` to `api` in `preload.ts`. Typecheck fails until it matches the bridge.
 6. Renderer calls `window.desktop.foo.*`.
+
+Persistence modules are split per aggregate, not per table or per feature: one file per root entity plus the rows that only exist through it (`threads.ts` covers threads and their messages). IPC handlers never call `db()` directly; they import from `persistence/`.
 
 Keep it flat. When a feature's service code outgrows one file, give it a folder (`src/ipc/foo/`), as t3code does for `orchestration/`.
 

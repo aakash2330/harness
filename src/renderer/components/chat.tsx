@@ -2,10 +2,10 @@ import { useState } from "react";
 import { CornerDownLeft, LoaderCircle } from "lucide-react";
 import { CircleLoader } from "react-spinners";
 import { Input } from "@/components/ui/input";
-import type { Message } from "../../contracts";
+import type { Message, Thread } from "../../contracts";
 
 
-export function Chat() {
+export function Chat({ thread }: { thread: Thread }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [pending, setPending] = useState(false);
 
@@ -14,7 +14,7 @@ export function Chat() {
     setMessages(next);
     setPending(true);
     try {
-      const reply = await window.desktop.chat.send(next);
+      const reply = await window.desktop.chat.send({ thread, messages: next });
       setMessages((m) => [...m, { role: "assistant", text: reply }]);
     } finally {
       setPending(false);

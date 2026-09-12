@@ -4,7 +4,10 @@ import { Channels } from "./ipc/channels";
 
 const api: DesktopBridge = {
   chat: {
-    send: (messages) => ipcRenderer.invoke(Channels.chatSend, messages),
+    send: (req) => ipcRenderer.invoke(Channels.chatSend, req),
+  },
+  dialog: {
+    pickDirectory: () => ipcRenderer.invoke(Channels.dialogPickDirectory),
   },
   auth: {
     loggedIn: () => ipcRenderer.invoke(Channels.authLoggedIn),

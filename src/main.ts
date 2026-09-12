@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import path from "node:path";
 import { registerChat } from "./ipc/chat";
 import { registerAuth } from "./ipc/auth";
+import { registerDialog } from "./ipc/dialog";
 import { openDatabase } from "./persistence/prisma";
 
 function createWindow() {
@@ -24,6 +25,7 @@ function createWindow() {
 
 registerChat(ipcMain);
 registerAuth(ipcMain);
+registerDialog(ipcMain);
 
 app.whenReady().then(() => {
   openDatabase(path.join(app.getPath("userData"), "state.sqlite"));

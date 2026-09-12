@@ -1,8 +1,11 @@
-import type { Message } from "./chat";
+import type { ChatSendRequest } from "./chat";
 
 export interface DesktopBridge {
   chat: {
-    send(messages: Message[]): Promise<string>;
+    send(req: ChatSendRequest): Promise<string>;
+  };
+  dialog: {
+    pickDirectory(): Promise<string | null>;
   };
   auth: {
     loggedIn(): Promise<boolean>;
