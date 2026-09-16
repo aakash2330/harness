@@ -16,6 +16,12 @@ src/
     prisma.ts           openDatabase(path) builds PrismaClient + libsql adapter, db() getter
     threads.ts          upsertThread, appendMessage; the only place that calls db() for chat
   generated/prisma/     `prisma generate` output, gitignored
+  agent/                copied from pi (github.com/earendil-works/pi, packages/agent/src/harness)
+    loop.ts             runAgent(): model call -> run tool_use blocks -> feed results back, until stop
+    tools/              bash, read, write, edit (+ edit-diff, path-utils, mutation queue), verbatim
+    env/nodejs.ts       NodeExecutionEnv over node:fs + child_process, verbatim
+    utils/              truncate, output-capture (publishes unthrottled, see below)
+    types.ts, context.ts  trimmed to what tools/env/utils import
   claude-auth.ts        auth service (OAuth), called by ipc/auth.ts
   main.ts               window + registerX(ipcMain) calls, nothing else
   preload.ts            implements DesktopBridge via Channels
@@ -43,3 +49,18 @@ rebuild). Schema in `prisma/schema.prisma`, models `@@map` onto t3code's column 
 lives in `prisma.config.ts` and points at Electron's userData dir; `DATABASE_URL` overrides it.
 `bun run db:migrate` (= `prisma migrate dev`) after editing the schema. Migrations are applied by the
 CLI only; the packaged app does not migrate itself yet.
+
+## Left out of the pi port
+
+Copied from pi's `packages/agent/src/harness`, then removed because nothing in harness uses them yet.
+Do not reinvent these; copy them back from pi when the need shows up.
+
+- `utils/adaptive-publisher.ts` - generic throttle that emits the latest state as a diff: first emit
+  after idle is immediate, each emit then earns a delay proportional to its byte size (target
+  100 KB/s, 100 ms floor), one trailing timer guarantees eventual delivery. `OutputCapture` used it to
+  rate-limit streamed shell output. Needed once tool output is streamed live to the renderer; until
+  then `OutputCapture.flush()` publishes on every write.
+- `tools/image.ts` - magic-byte sniffing (jpeg, png minus animated, gif, webp, bmp) plus a dependency-
+  free base64 encoder. `read.ts` used it to return images as `image` content blocks instead of decoded
+  bytes; pi's read tool also took an optional `imageProcessor` for resizing and BMP conversion. Needed
+  once the read tool should show the model screenshots or other image files.

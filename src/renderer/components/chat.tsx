@@ -16,6 +16,9 @@ export function Chat({ thread }: { thread: Thread }) {
     try {
       const reply = await window.desktop.chat.send({ thread, messages: next });
       setMessages((m) => [...m, { role: "assistant", text: reply }]);
+    } catch (e) {
+      const text = e instanceof Error ? e.message : String(e);
+      setMessages((m) => [...m, { role: "assistant", text: `Error: ${text}` }]);
     } finally {
       setPending(false);
     }

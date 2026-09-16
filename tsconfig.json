@@ -22,7 +22,7 @@
     "strict": true,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
+    "noUncheckedIndexedAccess": false, // pi files under src/agent are copied verbatim and predate this flag
     "noImplicitOverride": true,
 
     // Some stricter flags (disabled by default)
