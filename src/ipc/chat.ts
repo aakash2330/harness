@@ -2,7 +2,7 @@ import type { IpcMain } from "electron";
 import Anthropic from "@anthropic-ai/sdk";
 import { Channels } from "./channels";
 import { accessToken } from "../claude-auth";
-import { appendMessage, upsertThread } from "../persistence/threads";
+import { appendMessage, upsertThread } from "../databse/threads";
 import { runAgent } from "../agent/loop";
 import type { ChatSendRequest } from "../contracts";
 

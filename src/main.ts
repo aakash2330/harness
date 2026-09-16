@@ -3,7 +3,7 @@ import path from "node:path";
 import { registerChat } from "./ipc/chat";
 import { registerAuth } from "./ipc/auth";
 import { registerDialog } from "./ipc/dialog";
-import { openDatabase } from "./persistence/prisma";
+import { openDatabase } from "./databse/prisma";
 
 function createWindow() {
   const win = new BrowserWindow({

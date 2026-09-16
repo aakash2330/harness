@@ -12,7 +12,7 @@ src/
     channels.ts         channel name constants, used by preload and handlers
     chat.ts             registerChat(ipcMain)
     auth.ts             registerAuth(ipcMain)
-  persistence/
+  databse/
     prisma.ts           openDatabase(path) builds PrismaClient + libsql adapter, db() getter
     threads.ts          upsertThread, appendMessage; the only place that calls db() for chat
   generated/prisma/     `prisma generate` output, gitignored
@@ -37,7 +37,7 @@ Adding a feature `foo`:
 5. Add `foo: { ... }` to `api` in `preload.ts`. Typecheck fails until it matches the bridge.
 6. Renderer calls `window.desktop.foo.*`.
 
-Persistence modules are split per aggregate, not per table or per feature: one file per root entity plus the rows that only exist through it (`threads.ts` covers threads and their messages). IPC handlers never call `db()` directly; they import from `persistence/`.
+Databse modules are split per aggregate, not per table or per feature: one file per root entity plus the rows that only exist through it (`threads.ts` covers threads and their messages). IPC handlers never call `db()` directly; they import from `databse/`.
 
 Keep it flat. When a feature's service code outgrows one file, give it a folder (`src/ipc/foo/`), as t3code does for `orchestration/`.
 
