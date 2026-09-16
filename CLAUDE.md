@@ -4,6 +4,11 @@ globs: "*.ts, *.tsx, *.html, *.css, *.js, *.jsx, package.json"
 alwaysApply: false
 ---
 
+## MANDATORY: use the `ponytail` skill
+
+At the start of EVERY session in this project, before doing any coding work (writing, editing, refactoring, fixing, reviewing, or designing code, or choosing dependencies), invoke the `ponytail` skill via the Skill tool. This is not optional. Apply it to every coding task in the session, not just the first one. Only skip it for non-coding requests (questions, prose, explanations).
+
+
 Default to using Bun instead of Node.js.
 
 - Use `bun <file>` instead of `node <file>` or `ts-node <file>`

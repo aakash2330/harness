@@ -2,37 +2,21 @@ import { useState } from "react";
 import { CornerDownLeft, LoaderCircle } from "lucide-react";
 import { CircleLoader } from "react-spinners";
 import { Input } from "@/components/ui/input";
+import { sendMessage, useStore } from "../store";
 import type { Message, Thread } from "../../contracts";
 
-
 export function ThreadView({ thread }: { thread: Thread }) {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [pending, setPending] = useState(false);
-
-  async function send(text: string) {
-    const next: Message[] = [...messages, { role: "user", text }];
-    setMessages(next);
-    setPending(true);
-    try {
-      const reply = await window.desktop.thread.send({ thread, messages: next });
-      setMessages((m) => [...m, { role: "assistant", text: reply }]);
-    } catch (e) {
-      const text = e instanceof Error ? e.message : String(e);
-      setMessages((m) => [...m, { role: "assistant", text: `Error: ${text}` }]);
-    } finally {
-      setPending(false);
-    }
-  }
+  const pending = useStore((s) => s.pending.includes(thread.id));
 
   return (
     <>
       <div className="flex-1 overflow-y-auto">
         <div className="mx-auto max-w-3xl space-y-12 pb-6 text-[15px] leading-5">
-          {messages.map((m, i) => <MessageBubble key={i} {...m} />)}
+          {thread.messages.map((m, i) => <MessageBubble key={i} {...m} />)}
         </div>
       </div>
       <div className="mx-auto w-full max-w-3xl shrink-0 pb-4">
-        <ThreadInput pending={pending} onSend={send} />
+        <ThreadInput pending={pending} onSend={(text) => sendMessage(thread.id, text)} />
       </div>
     </>
   );

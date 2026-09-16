@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import path from "node:path";
-import { registerThread } from "./ipc/thread";
+import { registerThread, registerThreadGetAll } from "./ipc/thread";
 import { registerAuth } from "./ipc/auth";
 import { registerDialog } from "./ipc/dialog";
 import { openDatabase } from "./databse/prisma";
@@ -24,6 +24,7 @@ function createWindow() {
 }
 
 registerThread(ipcMain);
+registerThreadGetAll(ipcMain);
 registerAuth(ipcMain);
 registerDialog(ipcMain);
 

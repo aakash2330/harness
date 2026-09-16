@@ -1,8 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { db } from "./prisma";
-import type { Message, Thread } from "../contracts";
 
-export function upsertThread({ id, cwd }: Thread, model: string, title: string) {
+export function upsertThread(id: string, cwd: string, model: string, title: string) {
   const now = new Date();
   return db().thread.upsert({
     where: { id },
@@ -11,7 +10,14 @@ export function upsertThread({ id, cwd }: Thread, model: string, title: string) 
   });
 }
 
-export function appendMessage(threadId: string, { role, text }: Message) {
+export function appendMessage(threadId: string, role: string, text: string) {
   const now = new Date();
   return db().message.create({ data: { id: randomUUID(), threadId, role, text, createdAt: now, updatedAt: now } });
+}
+
+export function getAllThreads() {
+  return db().thread.findMany({
+    include: { messages: true },
+    orderBy: { createdAt: "desc" },
+  });
 }

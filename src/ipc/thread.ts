@@ -2,19 +2,20 @@ import type { IpcMain } from "electron";
 import Anthropic from "@anthropic-ai/sdk";
 import { Channels } from "./channels";
 import { accessToken } from "../claude-auth";
-import { appendMessage, upsertThread } from "../databse/threads";
+import { appendMessage, getAllThreads, upsertThread } from "../databse/threads";
 import { runAgent } from "../agent/loop";
-import type { ThreadSendRequest } from "../contracts";
+import type { MessageRole, Thread, ThreadSendRequest } from "../contracts";
 
 const MODEL = process.env.CLAUDE_MODEL ?? "claude-opus-5";
 
 // Mirrors pi-mono's Anthropic OAuth path: Bearer token + Claude Code identity
 // (beta flags, user-agent, x-app, and the system prompt) or the API rejects it.
 export function registerThread(ipc: IpcMain) {
-  ipc.handle(Channels.threadSend, async (_e, { thread, messages }: ThreadSendRequest) => {
+  ipc.handle(Channels.threadSend, async (_e, { thread }: ThreadSendRequest) => {
+    const messages = thread.messages;
     const user = messages.at(-1)!;
-    await upsertThread(thread, MODEL, user.text.slice(0, 80));
-    await appendMessage(thread.id, user);
+    await upsertThread(thread.id, thread.cwd, MODEL, user.text.slice(0, 80));
+    await appendMessage(thread.id, user.role, user.text);
 
     const client = new Anthropic({
       apiKey: null,
@@ -29,7 +30,19 @@ export function registerThread(ipc: IpcMain) {
       cwd: thread.cwd,
       messages: messages.map((m) => ({ role: m.role, content: m.text })),
     });
-    await appendMessage(thread.id, { role: "assistant", text });
+    await appendMessage(thread.id, "assistant", text);
     return text;
+  });
+}
+
+export function registerThreadGetAll(ipc: IpcMain) {
+  ipc.handle(Channels.threadGetAll, async (): Promise<Thread[]> => {
+    const rows = await getAllThreads();
+    return rows.map(({ id, cwd, title, messages }) => ({
+      id,
+      cwd,
+      title,
+      messages: messages.map(({ role, text }) => ({ role: role as MessageRole, text })),
+    }));
   });
 }

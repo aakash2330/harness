@@ -1,4 +1,9 @@
 export type MessageRole = "user" | "assistant";
-export interface Message { role: MessageRole; text: string }
-export interface Thread { id: string; cwd: string }
-export interface ThreadSendRequest { thread: Thread; messages: Message[] }
+export type Message = { role: MessageRole; text: string }
+export type Thread = {
+  id: string;
+  cwd: string;
+  title: string;
+  messages: Message[];
+}
+export type ThreadSendRequest = { thread: Thread }

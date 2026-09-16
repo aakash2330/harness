@@ -1,8 +1,9 @@
-import type { ThreadSendRequest } from "./thread";
+import type { Thread, ThreadSendRequest } from "./thread";
 
-export interface DesktopBridge {
+export type DesktopBridge = {
   thread: {
     send(req: ThreadSendRequest): Promise<string>;
+    getAll(): Promise<Thread[]>;
   };
   dialog: {
     pickDirectory(): Promise<string | null>;
