@@ -3,8 +3,8 @@ import type { DesktopBridge } from "./contracts";
 import { Channels } from "./ipc/channels";
 
 const api: DesktopBridge = {
-  chat: {
-    send: (req) => ipcRenderer.invoke(Channels.chatSend, req),
+  thread: {
+    send: (req) => ipcRenderer.invoke(Channels.threadSend, req),
   },
   dialog: {
     pickDirectory: () => ipcRenderer.invoke(Channels.dialogPickDirectory),

@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import path from "node:path";
-import { registerChat } from "./ipc/chat";
+import { registerThread } from "./ipc/thread";
 import { registerAuth } from "./ipc/auth";
 import { registerDialog } from "./ipc/dialog";
 import { openDatabase } from "./databse/prisma";
@@ -23,7 +23,7 @@ function createWindow() {
   else win.loadFile(path.join(app.getAppPath(), "dist-renderer", "index.html"));
 }
 
-registerChat(ipcMain);
+registerThread(ipcMain);
 registerAuth(ipcMain);
 registerDialog(ipcMain);
 

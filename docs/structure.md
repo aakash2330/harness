@@ -5,16 +5,16 @@ Mirrors [t3code](https://github.com/pingdotgg/t3code): cross-boundary types in `
 ```
 src/
   contracts/            types shared by main, preload, and renderer
-    chat.ts             Message, MessageRole
-    ipc.ts              DesktopBridge, nested by feature: desktop.chat.*, desktop.auth.*
+    thread.ts           Thread, Message, MessageRole, ThreadSendRequest
+    ipc.ts              DesktopBridge, nested by feature: desktop.thread.*, desktop.auth.*
     index.ts            barrel
   ipc/                  main-process IPC handlers
     channels.ts         channel name constants, used by preload and handlers
-    chat.ts             registerChat(ipcMain)
+    thread.ts           registerThread(ipcMain)
     auth.ts             registerAuth(ipcMain)
   databse/
     prisma.ts           openDatabase(path) builds PrismaClient + libsql adapter, db() getter
-    threads.ts          upsertThread, appendMessage; the only place that calls db() for chat
+    threads.ts          upsertThread, appendMessage; the only place that calls db() for threads
   generated/prisma/     `prisma generate` output, gitignored
   agent/                copied from pi (github.com/earendil-works/pi, packages/agent/src/harness)
     loop.ts             runAgent(): model call -> run tool_use blocks -> feed results back, until stop

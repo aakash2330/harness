@@ -1,5 +1,5 @@
 export const Channels = {
-  chatSend: "chat:send",
+  threadSend: "thread:send",
   dialogPickDirectory: "dialog:pickDirectory",
   authLoggedIn: "auth:loggedIn",
   authLogin: "auth:login",

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChevronRight, LogIn, LogOut, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Chat } from "@/components/chat";
+import { ThreadView } from "@/components/thread";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import type { Thread } from "../contracts";
@@ -63,7 +63,7 @@ export function App() {
 
       <SidebarInset className="h-svh">
         <div className={cn("h-[30px] shrink-0", drag)} />
-        {thread && <Chat key={thread.id} thread={thread} />}
+        {thread && <ThreadView key={thread.id} thread={thread} />}
       </SidebarInset>
     </SidebarProvider>
   );

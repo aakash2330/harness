@@ -1,8 +1,8 @@
-import type { ChatSendRequest } from "./chat";
+import type { ThreadSendRequest } from "./thread";
 
 export interface DesktopBridge {
-  chat: {
-    send(req: ChatSendRequest): Promise<string>;
+  thread: {
+    send(req: ThreadSendRequest): Promise<string>;
   };
   dialog: {
     pickDirectory(): Promise<string | null>;

@@ -4,14 +4,14 @@ import { Channels } from "./channels";
 import { accessToken } from "../claude-auth";
 import { appendMessage, upsertThread } from "../databse/threads";
 import { runAgent } from "../agent/loop";
-import type { ChatSendRequest } from "../contracts";
+import type { ThreadSendRequest } from "../contracts";
 
 const MODEL = process.env.CLAUDE_MODEL ?? "claude-opus-5";
 
 // Mirrors pi-mono's Anthropic OAuth path: Bearer token + Claude Code identity
 // (beta flags, user-agent, x-app, and the system prompt) or the API rejects it.
-export function registerChat(ipc: IpcMain) {
-  ipc.handle(Channels.chatSend, async (_e, { thread, messages }: ChatSendRequest) => {
+export function registerThread(ipc: IpcMain) {
+  ipc.handle(Channels.threadSend, async (_e, { thread, messages }: ThreadSendRequest) => {
     const user = messages.at(-1)!;
     await upsertThread(thread, MODEL, user.text.slice(0, 80));
     await appendMessage(thread.id, user);

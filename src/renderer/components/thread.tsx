@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import type { Message, Thread } from "../../contracts";
 
 
-export function Chat({ thread }: { thread: Thread }) {
+export function ThreadView({ thread }: { thread: Thread }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [pending, setPending] = useState(false);
 
@@ -14,7 +14,7 @@ export function Chat({ thread }: { thread: Thread }) {
     setMessages(next);
     setPending(true);
     try {
-      const reply = await window.desktop.chat.send({ thread, messages: next });
+      const reply = await window.desktop.thread.send({ thread, messages: next });
       setMessages((m) => [...m, { role: "assistant", text: reply }]);
     } catch (e) {
       const text = e instanceof Error ? e.message : String(e);
@@ -32,7 +32,7 @@ export function Chat({ thread }: { thread: Thread }) {
         </div>
       </div>
       <div className="mx-auto w-full max-w-3xl shrink-0 pb-4">
-        <ChatInput pending={pending} onSend={send} />
+        <ThreadInput pending={pending} onSend={send} />
       </div>
     </>
   );
@@ -47,7 +47,7 @@ function MessageBubble({ role, text }: Message) {
   );
 }
 
-function ChatInput({ pending, onSend }: { pending: boolean; onSend: (text: string) => void }) {
+function ThreadInput({ pending, onSend }: { pending: boolean; onSend: (text: string) => void }) {
   const [draft, setDraft] = useState("");
 
   function submit() {
