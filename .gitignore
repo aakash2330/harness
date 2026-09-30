@@ -37,5 +37,10 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 dist-electron
 dist-renderer
 
+# evals: compiled CLI binaries, Harbor job output
+dist-eval
+jobs
+__pycache__
+
 # prisma generate output
 src/generated/

@@ -6,13 +6,13 @@ import { appendMessage, getAllThreads, upsertThread } from "../databse/threads";
 import { runAgent } from "../agent/loop";
 import type { MessageRole, Thread, ThreadSendRequest } from "../contracts";
 
-// Mirrors pi-mono's Anthropic OAuth path: Bearer token + Claude Code identity
-// (beta flags, user-agent, x-app, and the system prompt) or the API rejects it.
 export function registerThreadSendMessage(ipc: IpcMain) {
   ipc.handle(Channels.threadSend, async (_e, { thread }: ThreadSendRequest) => {
     const messages = thread.messages;
     const user = messages.at(-1)!;
-    const { model } = await upsertThread(thread.id, thread.cwd, thread.model, user.text.slice(0, 80));
+    const model = process.env.CLAUDE_MODEL;
+    if (!model) throw new Error("CLAUDE_MODEL is not set");
+    await upsertThread(thread.id, thread.cwd, model, user.text.slice(0, 80));
     await appendMessage(thread.id, user.role, user.text);
 
     const client = new Anthropic({

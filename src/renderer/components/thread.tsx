@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { CornerDownLeft, LoaderCircle } from "lucide-react";
-import { CircleLoader } from "react-spinners";
 import { Input } from "@/components/ui/input";
 import { sendMessage, useStore } from "../store";
 import type { Message, Thread } from "../../contracts";
@@ -43,11 +42,6 @@ function ThreadInput({ pending, onSend }: { pending: boolean; onSend: (text: str
 
   return (
     <div className="relative">
-      {pending && (
-        <div className="mb-2 flex justify-start">
-          <CircleLoader color="var(--primary)" size={20} />
-        </div>
-      )}
       <Input
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
