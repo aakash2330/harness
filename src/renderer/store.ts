@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Message, Thread } from "../contracts";
+import { DEFAULT_MODEL, type Message, type Thread } from "../contracts";
 
 type State = {
   threads: Thread[];
@@ -22,7 +22,7 @@ export function addCwd(cwd: string) {
 }
 
 export function newThread(cwd: string) {
-  const thread: Thread = { id: crypto.randomUUID(), cwd, title: "", messages: [] };
+  const thread: Thread = { id: crypto.randomUUID(), cwd, title: "", model: DEFAULT_MODEL, messages: [] };
   useStore.setState((s) => ({ threads: [thread, ...s.threads], currentId: thread.id }));
 }
 

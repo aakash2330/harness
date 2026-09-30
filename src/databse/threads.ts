@@ -6,13 +6,14 @@ export function upsertThread(id: string, cwd: string, model: string, title: stri
   return db().thread.upsert({
     where: { id },
     create: { id, cwd, model, title, createdAt: now, updatedAt: now },
-    update: { updatedAt: now },
+    update: { model, updatedAt: now },
   });
 }
 
-export function appendMessage(threadId: string, role: string, text: string) {
+export async function appendMessage(threadId: string, role: string, text: string) {
   const now = new Date();
-  return db().message.create({ data: { id: randomUUID(), threadId, role, text, createdAt: now, updatedAt: now } });
+  const { model } = await db().thread.findUniqueOrThrow({ where: { id: threadId }, select: { model: true } });
+  return db().message.create({ data: { id: randomUUID(), threadId, role, text, model, createdAt: now, updatedAt: now } });
 }
 
 export function getAllThreads() {

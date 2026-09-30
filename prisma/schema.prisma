@@ -26,6 +26,7 @@ model Message {
   threadId    String   @map("thread_id")
   role        String
   text        String
+  model       String
   isStreaming Boolean  @default(false) @map("is_streaming")
   createdAt   DateTime @map("created_at")
   updatedAt   DateTime @map("updated_at")

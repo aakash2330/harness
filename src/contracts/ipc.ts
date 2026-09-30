@@ -13,4 +13,4 @@ export type DesktopBridge = {
     login(): Promise<void>;
     logout(): Promise<void>;
   };
-}
+};
