@@ -1,0 +1,10 @@
+---
+description: Read and follow the ponytail skill before any code change
+alwaysApply: true
+---
+
+# Ponytail before any change
+
+Before writing, editing, refactoring, fixing, reviewing, or designing code, or choosing a dependency, read `~/.claude/skills/ponytail/SKILL.md` and follow it. Do this for every coding task in the session. Skip it only for non-coding requests (questions, prose, explanations).
+
+Default intensity is full. Stop only when the user says "stop ponytail" or "normal mode".

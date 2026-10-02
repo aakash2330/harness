@@ -8,9 +8,4 @@ export type DesktopBridge = {
   dialog: {
     pickDirectory(): Promise<string | null>;
   };
-  auth: {
-    loggedIn(): Promise<boolean>;
-    login(): Promise<void>;
-    logout(): Promise<void>;
-  };
 };

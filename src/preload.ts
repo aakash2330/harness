@@ -10,11 +10,6 @@ const api: DesktopBridge = {
   dialog: {
     pickDirectory: () => ipcRenderer.invoke(Channels.dialogPickDirectory),
   },
-  auth: {
-    loggedIn: () => ipcRenderer.invoke(Channels.authLoggedIn),
-    login: () => ipcRenderer.invoke(Channels.authLogin),
-    logout: () => ipcRenderer.invoke(Channels.authLogout),
-  },
 };
 
 contextBridge.exposeInMainWorld("desktop", api);

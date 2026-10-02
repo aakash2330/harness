@@ -1,16 +1,14 @@
-import { useEffect, useState } from "react";
-import { ChevronRight, LogIn, LogOut, Plus } from "lucide-react";
+import { useEffect } from "react";
+import { ChevronRight, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThreadView } from "@/components/thread";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { addCwd, currentThread, loadThreads, newThread, openThread, useStore } from "./store";
 
 const drag = "[-webkit-app-region:drag]";
 
 export function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  useEffect(() => { window.desktop?.auth.loggedIn().then(setLoggedIn); }, []);
   useEffect(() => { loadThreads(); }, []);
   const cwds = useStore((s) => s.cwds);
   const threads = useStore((s) => s.threads);
@@ -56,21 +54,6 @@ export function App() {
             </div>
           ))}
         </SidebarContent>
-        <SidebarFooter className="items-start px-2 pb-3">
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            className="text-muted-foreground"
-            aria-label={loggedIn ? "Logout" : "Login with Claude"}
-            title={loggedIn ? "Logout" : "Login with Claude"}
-            onClick={async () => {
-              await (loggedIn ? window.desktop.auth.logout() : window.desktop.auth.login());
-              setLoggedIn(await window.desktop.auth.loggedIn());
-            }}
-          >
-            {loggedIn ? <LogOut /> : <LogIn />}
-          </Button>
-        </SidebarFooter>
       </Sidebar>
 
       <SidebarInset className="h-svh">

@@ -1,9 +1,11 @@
 import { app, BrowserWindow, ipcMain } from "electron";
+import dotenv from "dotenv";
 import path from "node:path";
 import { registerThreadSendMessage, registerThreadGetAll } from "./ipc/thread";
-import { registerAuth } from "./ipc/auth";
 import { registerDialog } from "./ipc/dialog";
 import { openDatabase } from "./databse/prisma";
+
+dotenv.config({ path: path.join(process.cwd(), ".env") });
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -25,7 +27,6 @@ function createWindow() {
 
 registerThreadSendMessage(ipcMain);
 registerThreadGetAll(ipcMain);
-registerAuth(ipcMain);
 registerDialog(ipcMain);
 
 app.whenReady().then(() => {

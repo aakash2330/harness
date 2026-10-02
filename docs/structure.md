@@ -6,12 +6,11 @@ Mirrors [t3code](https://github.com/pingdotgg/t3code): cross-boundary types in `
 src/
   contracts/            types shared by main, preload, and renderer
     thread.ts           Thread, Message, MessageRole, ThreadSendRequest
-    ipc.ts              DesktopBridge, nested by feature: desktop.thread.*, desktop.auth.*
+    ipc.ts              DesktopBridge, nested by feature: desktop.thread.*
     index.ts            barrel
   ipc/                  main-process IPC handlers
     channels.ts         channel name constants, used by preload and handlers
     thread.ts           registerThread(ipcMain)
-    auth.ts             registerAuth(ipcMain)
   databse/
     prisma.ts           openDatabase(path) builds PrismaClient + libsql adapter, db() getter
     threads.ts          upsertThread, appendMessage; the only place that calls db() for threads
@@ -22,11 +21,19 @@ src/
     env/nodejs.ts       NodeExecutionEnv over node:fs + child_process, verbatim
     utils/              truncate, output-capture (publishes unthrottled, see below)
     types.ts, context.ts  trimmed to what tools/env/utils import
-  claude-auth.ts        auth service (OAuth), called by ipc/auth.ts
-  main.ts               window + registerX(ipcMain) calls, nothing else
+  llm.ts                OpenAI-compatible client; reads LLM_API_KEY, LLM_BASE_URL, HARNESS_MODEL, HARNESS_EFFORT from env
+  main.ts               window + registerX(ipcMain) calls, loads .env via dotenv
   preload.ts            implements DesktopBridge via Channels
   renderer/             React, calls window.desktop.<feature>.<method>
+cli.ts                  headless entry: `bun cli.ts "<instruction>"` calls runAgent() in the current directory, no Electron
+evals/
+  harbor_agent.py       Harbor adapter: uploads the compiled cli.ts into a task container and runs it
 ```
+
+`bun run eval -d aider/aider-polyglot -l 5` compiles `cli.ts` for Linux (`dist-eval/`) and runs it through
+[Harbor](https://github.com/harbor-framework/harbor); arguments after `eval` go to `harbor run`. Results land in `jobs/`.
+`cli.ts` and `ipc/thread.ts` both call `createLlmClient()` and `runAgent()` from `src/llm.ts` / `src/agent/loop.ts`.
+Requires `LLM_API_KEY`, `LLM_BASE_URL`, `HARNESS_MODEL`, and `HARNESS_EFFORT` in the environment (`.env` for local dev).
 
 Adding a feature `foo`:
 
